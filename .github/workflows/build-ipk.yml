@@ -1,0 +1,96 @@
+name: Build sing-box IPK packages
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-ipk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64, mipsle]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tar gzip
+
+    - name: Determine version
+      id: version
+      run: |
+        if [[ $GITHUB_REF == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          VERSION=$(curl -s https://api.github.com/repos/SagerNet/sing-box/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+        fi
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Using version: ${VERSION}"
+
+    - name: Download sing-box
+      run: |
+        wget https://github.com/SagerNet/sing-box/releases/download/v${{ steps.version.outputs.version }}/sing-box-${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
+
+    - name: Create IPK package structure
+      run: |
+        mkdir -p sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/usr/bin
+        mkdir -p sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/etc/init.d
+        mkdir -p sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/CONTROL
+
+        tar -xzf sing-box-${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.tar.gz -C sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/usr/bin --strip-components=1
+
+        cat > sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/etc/init.d/sing-box <<EOF
+        #!/bin/sh /etc/rc.common
+
+        START=99
+        STOP=10
+
+        start() {
+            /usr/bin/sing-box run -c /etc/sing-box/config.json &
+        }
+
+        stop() {
+            killall sing-box
+        }
+        EOF
+
+        chmod +x sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/etc/init.d/sing-box
+
+        cat > sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/CONTROL/control <<EOF
+        Package: sing-box
+        Version: ${{ steps.version.outputs.version }}
+        Architecture: ${{ matrix.arch }}
+        Maintainer: GitHub Actions <actions@github.com>
+        Section: net
+        Description: The universal proxy platform.
+        EOF
+
+    - name: Package IPK
+      run: |
+        cd sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}
+        tar -czf ../data.tar.gz ./usr ./etc
+        cd ./CONTROL
+        tar -czf ../../control.tar.gz *
+        cd ..
+        echo "2.0" > ../debian-binary
+        cd ..
+        tar -czf sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk ./debian-binary ./control.tar.gz ./data.tar.gz
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}.ipk
+        path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
+
+    - name: Create release and upload assets
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          sing-box_${{ steps.version.outputs.version }}_*.ipk
