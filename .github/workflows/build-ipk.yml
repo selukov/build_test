@@ -89,9 +89,16 @@ jobs:
         name: sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}.ipk
         path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
 
-    - name: Create release and upload assets
+    - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ github.ref }}
+        name: Release v${{ steps.version.outputs.version }}
+        body: |
+          Pre-built sing-box IPK packages for OpenWRT
+          Version: ${{ steps.version.outputs.version }}
         files: |
-          sing-box_${{ steps.version.outputs.version }}_*.ipk
+          sing-box-${{ steps.version.outputs.version }}-*.ipk
+        draft: false
+        prerelease: false
