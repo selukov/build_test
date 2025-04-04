@@ -64,8 +64,9 @@ jobs:
 
         cat > sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/CONTROL/control <<EOF
         Package: sing-box
+        Depends: libc, libssp, librt, libpthread, libpthread
         Version: ${{ steps.version.outputs.version }}
-        Architecture: ${{ matrix.arch }}
+        Architecture: mipsel-3.4
         Maintainer: GitHub Actions <actions@github.com>
         Section: net
         Description: The universal proxy platform.
