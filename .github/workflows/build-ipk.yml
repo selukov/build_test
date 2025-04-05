@@ -27,16 +27,7 @@ jobs:
     - name: Determine version
       id: version
       run: |
-        # Для событий release используем tag_name из события
-        if [[ $GITHUB_EVENT_NAME == "release" ]]; then
-          VERSION=$(jq -r '.release.tag_name' $GITHUB_EVENT_PATH | sed 's/^v//')
-        # Для событий tag используем GITHUB_REF
-        elif [[ $GITHUB_REF == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/v}
-        # В остальных случаях берем последнюю версию
-        else
-          VERSION=$(curl -s https://api.github.com/repos/SagerNet/sing-box/releases/latest | jq -r '.tag_name' | sed 's/^v//')
-        fi
+        VERSION=$(curl -s https://api.github.com/repos/SagerNet/sing-box/releases/latest | jq -r '.tag_name' | sed 's/^v//')
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
         echo "Using version: ${VERSION}"
 
