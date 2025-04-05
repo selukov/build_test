@@ -2,8 +2,7 @@ name: Build sing-box IPK packages
 
 on:
   release:
-    types:
-      - created  # Этот тип срабатывает, когда релиз создается
+    types: [created] # Этот тип срабатывает, когда релиз создается
   workflow_dispatch:
   repository_dispatch:
   push:
@@ -23,13 +22,18 @@ jobs:
     - name: Set up environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y tar gzip
+        sudo apt-get install -y tar gzip jq
 
     - name: Determine version
       id: version
       run: |
-        if [[ $GITHUB_REF == refs/tags/* ]]; then
+        # Для событий release используем tag_name из события
+        if [[ $GITHUB_EVENT_NAME == "release" ]]; then
+          VERSION=$(jq -r '.release.tag_name' $GITHUB_EVENT_PATH | sed 's/^v//')
+        # Для событий tag используем GITHUB_REF
+        elif [[ $GITHUB_REF == refs/tags/* ]]; then
           VERSION=${GITHUB_REF#refs/tags/v}
+        # В остальных случаях берем последнюю версию
         else
           VERSION=$(curl -s https://api.github.com/repos/SagerNet/sing-box/releases/latest | jq -r '.tag_name' | sed 's/^v//')
         fi
@@ -92,16 +96,9 @@ jobs:
         name: sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}.ipk
         path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
 
-    - name: Create GitHub Release
-      if: startsWith(github.ref, 'refs/tags/')
+    - name: Upload to Release
+      if: ${{ github.event_name == 'release' || startsWith(github.ref, 'refs/tags/') }}
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}
-        name: Release v${{ steps.version.outputs.version }}
-        body: |
-          Pre-built sing-box IPK packages for OpenWRT
-          Version: ${{ steps.version.outputs.version }}
         files: |
           sing-box-${{ steps.version.outputs.version }}-*.ipk
-        draft: false
-        prerelease: false
