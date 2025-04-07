@@ -93,16 +93,18 @@ jobs:
         path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
 
   deploy-repository:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v1.0.0
-        release_name: Release v1.0.0
-        body: "Initial release"
-        draft: false
-        prerelease: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
+          body: "Initial release"
+          draft: false
+          prerelease: false
 
 
