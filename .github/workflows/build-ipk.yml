@@ -91,7 +91,8 @@ jobs:
       with:
         name: sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}.ipk
         path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
-        
+
+  deploy-repository:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
