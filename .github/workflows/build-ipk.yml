@@ -104,8 +104,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
           body: |
             Changes in this Release
             - First Change
@@ -114,6 +114,6 @@ jobs:
           prerelease: false
       - name: Log release info
         run: |
-          echo "github.ref ${{ github.ref }} created"
+          echo "github.ref ${{ github.ref_name }} created"
           echo "secrets.GITHUB_TOKEN ${{ secrets.GITHUB_TOKEN }} created"
 
