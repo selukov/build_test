@@ -111,7 +111,8 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
+      - name: Log release info
         run: |
-          echo "github.ref v${{ github.ref }} created"
-          echo "secrets.GITHUB_TOKEN v${{ secrets.GITHUB_TOKEN }} created"
+          echo "github.ref ${{ github.ref }} created"
+          echo "secrets.GITHUB_TOKEN ${{ secrets.GITHUB_TOKEN }} created"
 
