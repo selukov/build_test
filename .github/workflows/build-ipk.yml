@@ -111,5 +111,7 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-
+        run: |
+          echo "github.ref v${{ github.ref }} created"
+          echo "secrets.GITHUB_TOKEN v${{ secrets.GITHUB_TOKEN }} created"
 
