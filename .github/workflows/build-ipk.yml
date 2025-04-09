@@ -123,12 +123,23 @@ jobs:
           echo "github.ref ${{ github.ref_name }} created"
           echo "secrets.GITHUB_TOKEN ${{ secrets.GITHUB_TOKEN }} created"
           
-      - name: Upload Release Assets
+      - name: Upload sing-box arm64 package
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          for file in artifacts/**/**/*.ipk; do
-            echo "Uploading $file"
-            gh release upload "${{ github.ref_name }}" "$file" --repo "$GITHUB_REPOSITORY"
-          done
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/sing-box-arm64/sing-box_*.ipk
+          asset_name: sing-box_${{ github.ref_name }}_arm64.ipk
+          asset_content_type: application/vnd.debian.binary-package
+
+      - name: Upload sing-box mipsle package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/sing-box-mipsle/sing-box_*.ipk
+          asset_name: sing-box_${{ github.ref_name }}_mipsle.ipk
+          asset_content_type: application/vnd.debian.binary-package
 
