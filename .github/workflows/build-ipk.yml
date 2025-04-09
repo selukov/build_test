@@ -89,8 +89,8 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}.ipk
-        path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
+        name: sing-box-${{ matrix.arch }}.ipk
+        path: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}
 
   deploy-repository:
     runs-on: ubuntu-latest
@@ -139,9 +139,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/sing-box-arm64
+          asset_path: artifacts/sing-box_1.11.7_arm64
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_arm64.ipk
-          asset_content_type: application/vnd.debian.binary-package
+          asset_content_type: application/octet-stream
     
       - name: Upload sing-box mipsle package
         uses: actions/upload-release-asset@v1
@@ -149,8 +149,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/sing-box-mipsle
+          asset_path: artifacts/sing-box_1.11.7_mipsle
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_mipsle.ipk
-          asset_content_type: application/vnd.debian.binary-package
+          asset_content_type: application/octet-stream
 
 
