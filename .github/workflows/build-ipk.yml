@@ -99,7 +99,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: sing-box_${{ steps.version.outputs.version }}_${{ matrix.arch }}.ipk
+        name: ${{ matrix.arch }}
         path: ./*.ipk
         if-no-files-found: error
 
