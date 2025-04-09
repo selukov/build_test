@@ -139,7 +139,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/sing-box-${{ steps.version.outputs.version }}-arm64.ipk
+          asset_path: artifacts/sing-box-1.11.7-arm64.ipk
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_arm64.ipk
           asset_content_type: application/vnd.debian.binary-package
     
@@ -149,7 +149,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/sing-box-${{ steps.version.outputs.version }}-mipsle.ipk
+          asset_path: artifacts/sing-box-1.11.7-mipsle.ipk
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_mipsle.ipk
           asset_content_type: application/vnd.debian.binary-package
 
