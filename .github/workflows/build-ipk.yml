@@ -150,7 +150,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./
+          asset_path: ./sing-box_${{ steps.generate_tag.outputs.tag_name }}_arm64.ipk
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_arm64.ipk
           asset_content_type: application/octet-stream
     
@@ -160,7 +160,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./
+          asset_path: ./sing-box_${{ steps.generate_tag.outputs.tag_name }}_mipsle.ipk
           asset_name: sing-box_${{ steps.generate_tag.outputs.tag_name }}_mipsle.ipk
           asset_content_type: application/octet-stream
 
