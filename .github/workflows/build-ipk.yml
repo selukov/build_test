@@ -167,7 +167,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/sing-box_1.11.7_arm64.ipk
+          asset_path: ./sing-box_${{ needs.build-ipk.outputs.version }}_arm64
           asset_name: sing-box_1.11.7_arm64.ipk
           asset_content_type: application/octet-stream
     
@@ -177,7 +177,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/sing-box_1.11.7_mipsle.ipk
+          asset_path: ./sing-box_${{ needs.build-ipk.outputs.version }}_mipsle
           asset_name: sing-box_1.11.7_mipsle.ipk
           asset_content_type: application/octet-stream
 
