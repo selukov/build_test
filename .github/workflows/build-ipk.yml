@@ -95,6 +95,13 @@ jobs:
       run: |
         ls -al ./
         ls -aR ./
+        
+    - name: Set environment variable
+      run: echo "MY_ENV_VAR=myValue" >> $GITHUB_ENV
+
+    - name: Use environment variable
+      run: |
+        echo "The value of MY_ENV_VAR is $MY_ENV_VAR"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -133,6 +140,10 @@ jobs:
         run: |
           ls -al ./
           ls -R ./
+
+      - name: Use environment variable
+        run: |
+          echo "The value of MY_ENV_VAR is $MY_ENV_VAR"
           
       # - name: Build artifact
       #   run: |
