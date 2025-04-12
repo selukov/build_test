@@ -164,40 +164,16 @@ jobs:
       #   run: |
       #     ls -al ./sing-box_1.11.7_mipsle.ipk
       #     ls -R ./
+      - name: "Build & test"
+        run: |
+          echo "done!"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: ${{ steps.generate_tag.outputs.tag_name }}
-          release_name: Release ${{ steps.generate_tag.outputs.tag_name }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-
-      - name: Upload sing-box arm64 package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./sing-box-arm64/sing-box_1.11.7_arm64.ipk
-          asset_name: sing-box_1.11.7_arm64.ipk
-          asset_content_type: application/octet-stream
-    
-      - name: Upload sing-box mipsle package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./sing-box-mipsle/sing-box_1.11.7_mipsle.ipk
-          asset_name: sing-box_1.11.7_mipsle.ipk
-          asset_content_type: application/octet-stream
+          files: |
+            LICENSE.txt
+            *.ipk
 
 
