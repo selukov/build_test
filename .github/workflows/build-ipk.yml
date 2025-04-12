@@ -103,6 +103,12 @@ jobs:
       run: |
         echo "The value of MY_ENV_VAR is $MY_ENV_VAR"
 
+    - name: Store build timestamp
+      run: echo "BUILD_TIME=$(date +'%T')" >> $GITHUB_ENV
+
+    - name: Deploy using stored timestamp
+      run: echo "Deploying at $BUILD_TIME"
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -144,6 +150,9 @@ jobs:
       - name: Use environment variable
         run: |
           echo "The value of MY_ENV_VAR is $MY_ENV_VAR"
+
+      - name: Deploy using stored timestamp
+        run: echo "Deploying at $BUILD_TIME"
           
       # - name: Build artifact
       #   run: |
