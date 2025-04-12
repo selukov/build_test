@@ -176,6 +176,6 @@ jobs:
           prerelease: false
           files: |
             VERSION
-            *.ipk
+            */*.ipk
 
 
