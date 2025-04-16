@@ -48,7 +48,6 @@ jobs:
         mkdir -p sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/CONTROL
 
         tar -xzf sing-box-${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.tar.gz -C sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/opt/sbin --strip-components=1
-        mv /opt/sbin/LICENSE /opt/etc/sing-box/
 
         cat > sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}/opt/etc/init.d/S97sing-box <<EOF
         #!/bin/sh /etc/rc.common
@@ -80,6 +79,7 @@ jobs:
     - name: Package IPK
       run: |
         cd sing-box-${{ steps.version.outputs.version }}-${{ matrix.arch }}
+        mv opt/sbin/LICENSE opt/etc/sing-box/
         tar -czf ../data.tar.gz ./opt/sbin ./opt/etc
         cd ./CONTROL
         tar -czf ../../control.tar.gz *
