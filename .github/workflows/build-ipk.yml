@@ -177,7 +177,6 @@ jobs:
           title: "Development Build"
           prerelease: false
           files: |
-            VERSION
             */*.ipk
 
 
