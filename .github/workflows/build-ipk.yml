@@ -131,7 +131,7 @@ jobs:
           TAG_NAME="v$(date -u +'%Y.%m.%d-%H.%M.%S')"
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
-          echo ${{ env.tag_name }}
+          echo ${{ env.TAG_NAME }}
 
       - name: Create Git tag
         run: |
