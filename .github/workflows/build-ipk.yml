@@ -131,14 +131,14 @@ jobs:
           TAG_NAME="v$(date -u +'%Y.%m.%d-%H.%M.%S')"
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
-          echo ${{ env.TAG_NAME }}
+          echo ${{ steps.generate_tag.outputs.tag_name }}
 
       - name: Create Git tag
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git tag ${{ env.TAG_NAME }}
-          git push origin ${{ env.TAG_NAME }}
+          git tag ${{ steps.generate_tag.outputs.tag_name }}
+          git push origin ${{ steps.generate_tag.outputs.tag_name }}
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
