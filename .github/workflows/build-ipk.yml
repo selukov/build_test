@@ -148,9 +148,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=${{ steps.generate_tag.outputs.tag_name }}
+          
+          # Получаем коммиты с последнего тега
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          echo "Previous tag: $PREV_TAG"
+
+          if [ -z "$PREV_TAG" ]; then
+            git log --pretty=format:'- [%h](https://github.com/${{ github.repository }}/commit/%H): %s' > changelog.txt
+          else
+            git log "$PREV_TAG"..HEAD --pretty=format:'- [%h](https://github.com/${{ github.repository }}/commit/%H): %s' > changelog.txt
+          fi
+
+          echo "Changelog:"
+          cat changelog.txt
+
           gh release create "$TAG" artifacts/sing-box-*/sing-box_*.ipk \
             --repo "$GITHUB_REPOSITORY" \
             --title "Release $TAG" \
-            --notes "Changes in this release:\n- First Change\n- Second Change"
+            --notes-file changelog.txt
+
 
 
