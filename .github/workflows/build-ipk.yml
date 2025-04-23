@@ -143,7 +143,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./
+          path: artifacts
 
       - name: Display artifacts
         run: |
@@ -171,13 +171,14 @@ jobs:
         run: |
           echo "done!"
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          title: "Development Build"
-          prerelease: false
-          files: |
-            */*.ipk
+      - name: Create Release and Upload Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG=${{ steps.generate_tag.outputs.tag_name }}
+          gh release create "$TAG" artifacts/sing-box-*/sing-box_*.ipk \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Release $TAG" \
+            --notes "Changes in this release:\n- First Change\n- Second Change"
 
 
