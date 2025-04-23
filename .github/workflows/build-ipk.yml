@@ -171,14 +171,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=${{ steps.generate_tag.outputs.tag_name }}
-          
-          # Получаем коммиты с последнего тега
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "") #менять эту строку
-          echo "Previous tag: $PREV_TAG"
+
+          # Найдём предыдущий тег по дате создания
+          PREV_TAG=$(git tag --sort=-creatordate | grep -v "^${TAG}$" | head -n 1 || echo "")
 
           if [ -z "$PREV_TAG" ]; then
+            echo "No previous tag found. Logging all history."
             git log --pretty=format:'- [%h](https://github.com/${{ github.repository }}/commit/%H): %s' > changelog.txt
           else
+            echo "Generating changelog from $PREV_TAG to HEAD"
             git log "$PREV_TAG"..HEAD --pretty=format:'- [%h](https://github.com/${{ github.repository }}/commit/%H): %s' > changelog.txt
           fi
 
