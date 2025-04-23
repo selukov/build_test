@@ -25,7 +25,7 @@ get_clean_json() {
   }' "$1"
 }
 
-js_SETTING=$(get_clean_json "$SETTING" | jq -c '.' 2>/dev/null)
+js_SETTING=$(get_clean_json "$SETTING" | jq -c '.' 2>/dev/null) # Передаем путь к JSON-файлу
 
 
 echo "$js_SETTING"
