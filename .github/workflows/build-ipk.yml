@@ -125,11 +125,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Generate unique tag
+      - name: Read version from VERSION file
         id: generate_tag
         run: |
-          TAG_NAME="v$(date -u +'%Y.%m.%d-%H.%M.%S')"
-          cat VERSION >> TAG_NAME
+          TAG_NAME="v$(cat VERSION | tr -d ' \n')"
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Git tag and push
