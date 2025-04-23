@@ -128,7 +128,8 @@ jobs:
       - name: Read version from VERSION file
         id: generate_tag
         run: |
-          TAG_NAME="v$(cat VERSION | tr -d ' \n')"
+          js_SETTING=$(cat etc/swave/settings.json)
+          TAG_NAME="v$(echo "$js_SETTING" | jq -r '.app.version')"
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Git tag and push
