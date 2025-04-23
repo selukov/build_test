@@ -123,7 +123,9 @@ jobs:
     needs: [build-ipk]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Read version from VERSION file
         id: generate_tag
