@@ -1,8 +1,9 @@
 name: Build sing-box IPK packages
 
 on:
+  workflow_dispatch:
   release:
-    types: [created] # Этот тип срабатывает, когда релиз создается
+    types: [created] # Запускается, когда ты создаёшь релиз вручную
   push:
     tags:
       - 'R*'
