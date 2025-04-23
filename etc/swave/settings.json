@@ -2,7 +2,7 @@
   "client":
   {
     "name": "sing-box",
-    "version": "1.11.7",
+    "version": "1.11.8", // сменил версию
     "path_config": "/opt/etc/sing-box/configs"
   },
   "app":
