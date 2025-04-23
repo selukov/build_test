@@ -8,7 +8,7 @@
   "app":
   {
     "name": "swave",
-    "version": "0.1.4", // добавляю комменты
+    "version": "0.1.4", // добав ляю комменты
     "log": ""
   },
   "network":
@@ -23,7 +23,7 @@
     [
       "xt_TPROXY.ko"
     ],
-    "module_path": "/lib/modules/4.9-ndm-5",
+    "module_path": "/lib/modules/4.9-ndm-5", // сменил путь
     "port_forwarding_list":
     [
       80,
