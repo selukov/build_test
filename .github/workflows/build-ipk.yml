@@ -3,7 +3,10 @@ name: Build sing-box IPK packages
 on:
   release:
     types: [created] # Этот тип срабатывает, когда релиз создается
-
+  push:
+    tags:
+      - 'R*'
+      
       
 permissions:
   contents: write
