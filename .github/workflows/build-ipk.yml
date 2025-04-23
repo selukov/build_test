@@ -173,7 +173,7 @@ jobs:
           TAG=${{ steps.generate_tag.outputs.tag_name }}
           
           # Получаем коммиты с последнего тега
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "") #менять эту строку
           echo "Previous tag: $PREV_TAG"
 
           if [ -z "$PREV_TAG" ]; then
