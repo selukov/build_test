@@ -30,7 +30,7 @@ js_SETTING=$(get_clean_json "$SETTING" | jq -c '.' 2>/dev/null) # Передае
 
 echo "$js_SETTING"
 
-port_forwarding_list=$(echo "$js_SETTING" | jq -r '.network.port_forwarding_list | join(",")')
+port_forwarding_list=$(echo "$js_SETTING" | jq -r '.network.port_forwarding_list | join(",")')  #ports
 
 # Извлекаем port_forwarding_list из JSON файла
 #port_forwarding_list=$(jq -r '.network.port_forwarding_list | join(",")' $SETTING)
